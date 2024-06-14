@@ -24,10 +24,9 @@
 }
 
 :root {
-  /* --primary-clr: #000;
+  --primary-clr: #0d6efd;
   --secondary-clr: #1e202b;
-  --third-clr: #262936;
-  --fourth-clr: #323544; */
+  --bg-color: rgba(255, 255, 255, 0.6);
 }
 
 body {
@@ -58,19 +57,19 @@ a {
 ----------------------------------------*/
 
 .clear-bg {
-  background-color: rgba(255, 255, 255, 0.6);
+  background-color: var(--bg-color);
 }
 
 /*----------------------------------------
   02. NavBar
 ----------------------------------------*/
 .navBar-container {
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: var(--bg-color);
   backdrop-filter: blur(20px);
   box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.2);
 }
 .logo-container {
-  color: white;
+  color: #fff;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -84,13 +83,13 @@ a {
 }
 
 .navbar-brand {
-  --bs-navbar-brand-color: white;
+  --bs-navbar-brand-color: #fff;
 }
 a.nav-link {
-  --bs-nav-link-color: #0d6efd;
-  --bs-navbar-active-color: white;
-  --bs-nav-link-hover-color: white;
-  background-color: rgba(255, 255, 255, 0.6);
+  --bs-nav-link-color: var(--primary-clr);
+  --bs-navbar-active-color: #fff;
+  --bs-nav-link-hover-color: #fff;
+  background-color: var(--bg-color);
 }
 
 .nav-links-list a {
@@ -104,7 +103,7 @@ a.nav-link {
 }
 .nav-links-list a:hover,
 .nav-links-list a.active {
-  background-color: #0d6efd;
+  background-color: var(--primary-clr);
 }
 .nav-links-list a:hover {
   transform: scale(1.05);
@@ -147,43 +146,29 @@ button.navbar-toggler:focus {
   top: 1rem;
 }
 
-.hourly li {
-  position: relative;
-}
-.hourly li:not(:nth-child(1))::before {
-  content: "";
-  background-color: rgba(255, 255, 255, 0.5);
+.hour-white-line:not(:last-child) {
+  height: 70px;
   width: 1px;
-  height: 70%;
-  position: absolute;
-  left: -30%;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.week-list li {
-  position: relative;
-}
-.week-list li:not(:nth-child(1)):before {
-  content: "";
-  position: absolute;
-  top: -8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 70%;
-  height: 1px;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: #fff;
+  transform: translateY(30%);
 }
 
 .week-list .day {
   text-align: center;
-  width: 43.9px;
+  width: 44px;
 }
-
+.week-white-line:not(:last-child) {
+  width: 70px;
+  height: 1px;
+  background-color: #fff;
+}
 .additional-info p {
   font-size: 1.125rem;
 }
-
+.week-condition {
+  width: 50px;
+  text-align: center;
+}
 /*----------------------------------------
   04. Footer
 ----------------------------------------*/
@@ -203,19 +188,19 @@ footer button {
   width: 35px;
   height: 35px;
   border-radius: 50%;
-  background-color: #0d6efd;
+  background-color: var(--primary-clr);
   display: grid;
   place-items: center;
   transition: 0.3s;
 }
 footer a {
-  color: white;
+  color: #fff;
 }
 
 .icon-container:hover {
-  background-color: white;
+  background-color: #fff;
   transform: scale(1.1);
 }
 .icon-container:hover i {
-  color: #0d6efd;
+  color: var(--primary-clr);
 }

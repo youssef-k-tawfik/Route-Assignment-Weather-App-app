@@ -15,22 +15,6 @@
 ----------------------------------------*/
 
 // const GOOGLE_MAPS_API_KEY = "AIzaSyDN6Hu-a_vLpV53pBXnDw49U53osu6NFXc";
-let userLatitude, userLongitude;
-async function getUserLocation() {
-  try {
-    const { latitude, longitude } = await getGeolocation();
-
-    const res = await fetch(
-      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&sensor=true&key=AIzaSyDN6Hu-a_vLpV53pBXnDw49U53osu6NFXc`
-    );
-    // "https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&sensor=true&key=AIzaSyDN6Hu-a_vLpV53pBXnDw49U53osu6NFXc"
-    const data = await res.json();
-    console.log(data);
-  } catch (err) {
-    console.error(err);
-  }
-}
-
 const WEATHER_API_KEY = "11f69ed6df8f459e80d51521241306";
 let fetchedData;
 const dataMap = new Map();
@@ -39,6 +23,34 @@ const dataMap = new Map();
 01. Events
 ----------------------------------------*/
 
+document.addEventListener("DOMContentLoaded", async () => {
+  const city = await getUserLocation();
+  getData(city);
+});
+
+document.getElementById("cityInput").addEventListener("input", (e) => {
+  const query = e.target.value.trim();
+  /^[a-zA-Z\s\u0621-\u064A]+$/.test(query) && getData(query);
+});
+
+/*----------------------------------------
+02. Functions
+----------------------------------------*/
+
+async function getUserLocation() {
+  try {
+    console.log("hi");
+    const { latitude, longitude } = await getGeolocation();
+    const res = await fetch(
+      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${GOOGLE_MAPS_API_KEY}`
+    );
+    const data = await res.json();
+    return data.results[0].address_components[4].short_name;
+  } catch (err) {
+    console.error(err);
+    return "Alexandria";
+  }
+}
 function getGeolocation() {
   return new Promise((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(
@@ -72,31 +84,22 @@ function onGeoLocationFail(err) {
   console.error(`Couldn't get user's location because: ${errorMessage}`);
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  getUserLocation();
-  // getData(getUserLocation());
-  getData("Alexandria");
-});
-
-document.getElementById("cityInput").addEventListener("input", (e) => {
-  const query = e.target.value;
-  getData(query);
-});
-
-/*----------------------------------------
-02. Functions
-----------------------------------------*/
-
 async function getData(city) {
-  try {
-    const res = await fetch(
-      `https://api.weatherapi.com/v1/forecast.json?key=${WEATHER_API_KEY}&q=${city}&days=7`
-    );
-    fetchedData = await res.json();
-    mapData();
+  if (dataMap.has(city)) {
+    // Use cached data if available
     displayAllData();
-  } catch (err) {
-    console.error(err);
+  } else {
+    try {
+      const res = await fetch(
+        `https://api.weatherapi.com/v1/forecast.json?key=${WEATHER_API_KEY}&q=${city}&days=7`
+      );
+      fetchedData = await res.json();
+      dataMap.set(city, fetchedData);
+      mapData();
+      displayAllData();
+    } catch (err) {
+      console.error(err);
+    }
   }
 }
 
@@ -177,11 +180,18 @@ function mapWeekData() {
     dataMap.set(`day ${i + 1}`, {
       day: i === 0 ? "Today" : getDay(today + i),
       conditionURL: forecastDay.day.condition.icon,
-      conditionText: forecastDay.day.condition.text,
+      conditionText: getConditionText(forecastDay.day.condition.text),
       maxTemp: Math.floor(forecastDay.day.maxtemp_c),
       minTemp: Math.floor(forecastDay.day.mintemp_c),
     });
   });
+}
+function getConditionText(txt) {
+  return txt.includes("rain")
+    ? "rainy"
+    : txt.includes("Cloud")
+    ? "cloudy"
+    : txt;
 }
 
 function displayAllData() {
@@ -234,6 +244,7 @@ function generateHourlyElement(hour) {
         ${hour.temp}&deg;
       </div>
     </li> 
+    <li class="hour-white-line"></li>
   `;
 }
 
@@ -262,9 +273,10 @@ function generateForecastDay(day) {
         src="${day.conditionURL}"
         alt="weather condition"
       />
-      <p>${day.conditionText}</p>
+      <p class="week-condition">${day.conditionText}</p>
     </div>
-    <div class="max-min">${day.maxTemp}/${day.minTemp}</div>
+    <div class="max-min">${day.maxTemp}&deg;/${day.minTemp}&deg;</div>
   </li>
+  <li class="week-white-line mx-auto"></li>
   `;
 }
