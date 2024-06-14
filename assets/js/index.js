@@ -39,7 +39,7 @@ document.getElementById("cityInput").addEventListener("input", (e) => {
 async function getData(city) {
   try {
     const res = await fetch(
-      `http://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${city}&days=7`
+      `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${city}&days=7`
     );
     fetchedData = await res.json();
     mapData();
