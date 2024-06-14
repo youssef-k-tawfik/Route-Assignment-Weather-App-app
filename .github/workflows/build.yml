@@ -1,6 +1,9 @@
 on: push
 jobs:
-  first-job:
+  first-job-name:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "${{secrets.YOUSSEF_SONA_SECRET}}"
+      - name: Trying to access secrets
+        run: echo "$SECRETVAR"
+        env:
+          SECRETVAR: ${{secrets.YOUSSEF_SONA_SECRET}}
