@@ -92,23 +92,18 @@ function onGeoLocationFail(err) {
 }
 
 async function getData(city) {
-  if (dataMap.has(city)) {
-    // Use cached data if available
+  try {
+    const res = await fetch(
+      `https://api.weatherapi.com/v1/forecast.json?key=${getKey(
+        WEATHER_API_KEY
+      )}&q=${city}&days=7`
+    );
+    fetchedData = await res.json();
+    dataMap.set(city, fetchedData);
+    mapData();
     displayAllData();
-  } else {
-    try {
-      const res = await fetch(
-        `https://api.weatherapi.com/v1/forecast.json?key=${getKey(
-          WEATHER_API_KEY
-        )}&q=${city}&days=7`
-      );
-      fetchedData = await res.json();
-      dataMap.set(city, fetchedData);
-      mapData();
-      displayAllData();
-    } catch (err) {
-      console.error(err);
-    }
+  } catch (err) {
+    console.error(err);
   }
 }
 
