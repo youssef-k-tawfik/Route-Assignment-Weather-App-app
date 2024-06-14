@@ -7,7 +7,7 @@
     00. Global
     01. Utilities
     02. NavBar
-    03. Weather
+    03. Weather Section
     04. Footer
 
 ----------------------------------------*/
@@ -115,18 +115,22 @@ button.navbar-toggler:focus {
 }
 
 /*----------------------------------------
-  03. Weather
+  03. Weather Section
 ----------------------------------------*/
 
 .weather-app .container {
   backdrop-filter: blur(20px);
+}
+.hourly{
+  height: 172px;
+  overflow: hidden;
 }
 .additional-info .row > div {
   display: flex;
   justify-content: center;
 }
 .additional-info .inner {
-  padding: 20px;
+  padding: 10px;
   min-width: 175px;
 }
 
@@ -139,15 +143,53 @@ button.navbar-toggler:focus {
   left: 1rem;
   top: 1rem;
 }
+
+.hourly li {
+  position: relative;
+}
+.hourly li:not(:nth-child(1))::before {
+  content: "";
+  background-color: rgba(255, 255, 255, 0.5);
+  width: 1px;
+  height: 70%;
+  position: absolute;
+  left: -30%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.week-list li {
+  position: relative;
+}
+.week-list li:not(:nth-child(1)):before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.additional-info p {
+  font-size: 1.125rem;
+}
+
 /*----------------------------------------
   04. Footer
 ----------------------------------------*/
 footer {
   backdrop-filter: blur(20px);
 }
+footer input[type="email"] {
+  padding: 0.6rem 0.75rem;
+}
+
 footer button {
-  right: 0;
-  top: 0;
+  right: 3px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 .icon-container {
   width: 35px;
@@ -164,6 +206,7 @@ footer a {
 
 .icon-container:hover {
   background-color: white;
+  transform: scale(1.1);
 }
 .icon-container:hover i {
   color: #0d6efd;

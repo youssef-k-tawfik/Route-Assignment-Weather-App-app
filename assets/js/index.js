@@ -14,15 +14,206 @@
   00. Variables
 ----------------------------------------*/
 
-const API_KEY = "11f69ed6df8f459e80d51521241306";
-const city = "Alexandria";
-const fetchURL = `http://api.weatherapi.com/v1/forecast.json?key=11f69ed6df8f459e80d51521241306&q=${city}&days=7`;
-console.log(fetchURL);
+// const API_KEY = "11f69ed6df8f459e80d51521241306";
+// const city = "Alexandria";
+// const fetchURL = `http://api.weatherapi.com/v1/forecast.json?key=11f69ed6df8f459e80d51521241306&q=${city}&days=7`;
+// console.log(fetchURL);
+
+let fetchedData = {};
+const dataMap = new Map();
 
 /*----------------------------------------
-  01. Events
+01. Events
 ----------------------------------------*/
 
+document.addEventListener("DOMContentLoaded", () => {
+  getData();
+});
+
+document.getElementById("cityInput").addEventListener("input", (e) => {
+  const query = e.target.value;
+});
+
 /*----------------------------------------
-  02. Functions
+02. Functions
 ----------------------------------------*/
+
+async function getData() {
+  try {
+    const res = await fetch("./assets/js/dummyResponse.json");
+    fetchedData = await res.json();
+    mapData();
+    displayAllData();
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+function mapData() {
+  // ! NOW
+  mapNowData();
+
+  // ! Hourly
+  mapHourlyData();
+
+  // ! Additional info
+  mapAdditionalInfoData();
+
+  // ! 7-Day Forecast
+  mapWeekData();
+}
+
+function mapNowData() {
+  dataMap
+    .set("queriedLocation", fetchedData.location.name)
+    .set("currentTemp", Math.floor(fetchedData.current.temp_c))
+    .set("currentCondition", fetchedData.current.condition.text)
+    .set("currentConditionIcon", fetchedData.current.condition.icon);
+}
+
+function mapHourlyData() {
+  const currentHour = new Date().getHours();
+  const hourly = fetchedData.forecast.forecastday[0].hour.slice(
+    currentHour,
+    currentHour + 6
+  );
+  if (hourly.length < 6) {
+    const hoursLeft = 6 - hourly.length;
+    for (let i = 0; i < hoursLeft; i++) {
+      hourly.push(fetchedData.forecast.forecastday[1].hour[i]);
+    }
+  }
+  // console.log(hourly); // * Now hourly has all 6 days
+
+  hourly.forEach((hour, i) => {
+    dataMap.set(`hour ${i + 1}`, {
+      time: getTime(currentHour + i),
+      conditionURL: hour.condition.icon,
+      temp: Math.floor(hour.temp_c),
+    });
+  });
+}
+
+function mapAdditionalInfoData() {
+  dataMap
+    .set("realFeel", fetchedData.current.feelslike_c)
+    .set("windSpeed", fetchedData.current.wind_kph)
+    .set("pressure", fetchedData.current.pressure_mb)
+    .set("uvIndex", fetchedData.current.uv);
+}
+
+function getTime(time) {
+  let hour;
+  const calculatedHour = time < 24 ? time : time - 24;
+  if (calculatedHour === 0) hour = "12 AM";
+  else if (calculatedHour === 12) hour = "12 PM";
+  else if (calculatedHour < 12) hour = `${calculatedHour} AM`;
+  else hour = `${calculatedHour - 12} PM`;
+  return hour;
+}
+
+function getDay(day) {
+  const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"];
+  day = day < weekDays.length ? day : day - weekDays.length;
+  return weekDays[day];
+}
+
+function mapWeekData() {
+  const today = new Date().getDay();
+  const week = fetchedData.forecast.forecastday; // List of 7 days
+
+  week.forEach((forecastDay, i) => {
+    dataMap.set(`day ${i + 1}`, {
+      day: i === 0 ? "Today" : getDay(today + i),
+      conditionURL: forecastDay.day.condition.icon,
+      conditionText: forecastDay.day.condition.text,
+      maxTemp: Math.floor(forecastDay.day.maxtemp_c),
+      minTemp: Math.floor(forecastDay.day.mintemp_c),
+    });
+  });
+}
+
+function displayAllData() {
+  console.log(dataMap);
+
+  // ! NOW
+  displayNowData();
+
+  // ! Hourly
+  displayHourly();
+
+  // ! Additional
+  displayAdditionalData();
+
+  // ! 7 Days
+  displayWeek();
+}
+
+function displayNowData() {
+  document.getElementById("htmlLocation").textContent =
+    dataMap.get("queriedLocation");
+  document.getElementById("htmlCurrentTemp").textContent =
+    dataMap.get("currentTemp");
+  document.getElementById("htmlCurrentConditionIMG").src = dataMap.get(
+    "currentConditionIcon"
+  );
+  document.getElementById("htmlCurrentCondition").textContent =
+    dataMap.get("currentCondition");
+}
+
+function displayHourly() {
+  const hourlyList = document.querySelector(".hourly-list");
+  hourlyList.innerHTML = "";
+  for (let i = 1; i < 7; i++) {
+    const hour = dataMap.get(`hour ${i}`);
+    hourlyList.innerHTML += generateHourlyElement(hour);
+  }
+}
+function generateHourlyElement(hour) {
+  return `
+    <li>
+      <div class="hour-head">${hour.time}</div>
+      <div class="hour-body">
+        <img
+          src="${hour.conditionURL}"
+          alt="hour condition"
+        />
+      </div>
+      <div class="hour-footer">
+        ${hour.temp}&deg;
+      </div>
+    </li> 
+  `;
+}
+
+function displayAdditionalData() {
+  document.getElementById("htmlRealFeel").textContent = dataMap.get("realFeel");
+  document.getElementById("htmlWindSpeed").textContent =
+    dataMap.get("windSpeed");
+  document.getElementById("htmlPressure").textContent = dataMap.get("pressure");
+  document.getElementById("htmlUV").textContent = dataMap.get("uvIndex");
+}
+
+function displayWeek() {
+  const weekList = document.querySelector(".week-list");
+  weekList.innerHTML = "";
+  for (let i = 1; i < 8; i++) {
+    const day = dataMap.get(`day ${i}`);
+    weekList.innerHTML += generateForecastDay(day);
+  }
+}
+function generateForecastDay(day) {
+  return `
+  <li class="d-flex justify-content-between align-items-center">
+    <div class="day">${day.day}</div>
+    <div class="condition d-flex align-items-center gap-2">
+      <img
+        src="${day.conditionURL}"
+        alt="weather condition"
+      />
+      <p>${day.conditionText}</p>
+    </div>
+    <div class="max-min">${day.maxTemp}/${day.minTemp}</div>
+  </li>
+  `;
+}
