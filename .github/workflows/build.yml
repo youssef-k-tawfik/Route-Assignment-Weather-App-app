@@ -4,6 +4,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Trying to access secrets
-        run: echo "$SECRETVAR"
+        run: |
+          echo "$SECRETVAR"
         env:
-          SECRETVAR: ${{secrets.YOUSSEF_SONA_SECRET}}
+          SECRETVAR: ${{ secrets.YOUSSEF_SONA_SECRET }}
