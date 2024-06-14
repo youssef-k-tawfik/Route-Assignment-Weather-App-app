@@ -15,6 +15,6 @@ jobs:
         run: npm install
 
       - name: Run JavaScript file
-        run: node securedAPI.js
+        run: node assets/js/securedAPI.js
         env:
           SECRETVAR: ${{ secrets.YOUSSEF_SONA_SECRET }}
