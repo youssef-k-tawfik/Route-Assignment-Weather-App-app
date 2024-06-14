@@ -14,12 +14,9 @@
   00. Variables
 ----------------------------------------*/
 
-// const API_KEY = "11f69ed6df8f459e80d51521241306";
-// const city = "Alexandria";
-// const fetchURL = `http://api.weatherapi.com/v1/forecast.json?key=11f69ed6df8f459e80d51521241306&q=${city}&days=7`;
-// console.log(fetchURL);
+const API_KEY = "11f69ed6df8f459e80d51521241306";
 
-let fetchedData = {};
+let fetchedData;
 const dataMap = new Map();
 
 /*----------------------------------------
@@ -27,20 +24,23 @@ const dataMap = new Map();
 ----------------------------------------*/
 
 document.addEventListener("DOMContentLoaded", () => {
-  getData();
+  getData("Alexandria");
 });
 
 document.getElementById("cityInput").addEventListener("input", (e) => {
   const query = e.target.value;
+  getData(query);
 });
 
 /*----------------------------------------
 02. Functions
 ----------------------------------------*/
 
-async function getData() {
+async function getData(city) {
   try {
-    const res = await fetch("./assets/js/dummyResponse.json");
+    const res = await fetch(
+      `http://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${city}&days=7`
+    );
     fetchedData = await res.json();
     mapData();
     displayAllData();
@@ -96,9 +96,9 @@ function mapHourlyData() {
 
 function mapAdditionalInfoData() {
   dataMap
-    .set("realFeel", fetchedData.current.feelslike_c)
-    .set("windSpeed", fetchedData.current.wind_kph)
-    .set("pressure", fetchedData.current.pressure_mb)
+    .set("realFeel", Math.floor(fetchedData.current.feelslike_c))
+    .set("windSpeed", Math.floor(fetchedData.current.wind_kph))
+    .set("pressure", Math.floor(fetchedData.current.pressure_mb))
     .set("uvIndex", fetchedData.current.uv);
 }
 

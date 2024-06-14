@@ -24,10 +24,10 @@
 }
 
 :root {
-  --primary-clr: #000;
+  /* --primary-clr: #000;
   --secondary-clr: #1e202b;
   --third-clr: #262936;
-  --fourth-clr: #323544;
+  --fourth-clr: #323544; */
 }
 
 body {
@@ -87,9 +87,10 @@ a {
   --bs-navbar-brand-color: white;
 }
 a.nav-link {
-  --bs-nav-link-color: black;
-  --bs-navbar-active-color: var(--primary-clr);
-  --bs-nav-link-hover-color: var(--primary-clr);
+  --bs-nav-link-color: #0d6efd;
+  --bs-navbar-active-color: white;
+  --bs-nav-link-hover-color: white;
+  background-color: rgba(255, 255, 255, 0.6);
 }
 
 .nav-links-list a {
@@ -97,14 +98,13 @@ a.nav-link {
   --bs-nav-link-font-size: 0.875rem;
   padding-top: 5px;
   padding-bottom: 5px;
-  border: 2px solid transparent;
   border-radius: 30px;
   margin-left: 10px;
   transition: 0.3s;
 }
-.nav-links-list a.active,
-.nav-links-list a:hover {
-  border-color: var(--primary-clr);
+.nav-links-list a:hover,
+.nav-links-list a.active {
+  background-color: #0d6efd;
 }
 
 button.navbar-toggler {
@@ -121,7 +121,7 @@ button.navbar-toggler:focus {
 .weather-app .container {
   backdrop-filter: blur(20px);
 }
-.hourly{
+.hourly {
   height: 172px;
   overflow: hidden;
 }
