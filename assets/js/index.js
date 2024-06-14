@@ -14,9 +14,14 @@
   00. Variables
 ----------------------------------------*/
 
-// const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY;
-// const WEATHER_API_KEY = process.env.WEATHER_API_KEY;
-// console.log(GOOGLE_MAPS_API_KEY, WEATHER_API_KEY);
+const GOOGLE_MAPS_API_KEY =
+  "QUl6YVN5RE42SHUtYV92THBWNTNwQlhuRHc0OVU1M29zdTZORlhj";
+const WEATHER_API_KEY = "MTFmNjllZDZkZjhmNDU5ZTgwZDUxNTIxMjQxMzA2";
+
+function getKey(key) {
+  return atob(key);
+}
+
 let fetchedData;
 const dataMap = new Map();
 
@@ -43,7 +48,9 @@ async function getUserLocation() {
     console.log("hi");
     const { latitude, longitude } = await getGeolocation();
     const res = await fetch(
-      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${GOOGLE_MAPS_API_KEY}`
+      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${getKey(
+        GOOGLE_MAPS_API_KEY
+      )}`
     );
     const data = await res.json();
     return data.results[0].address_components[4].short_name;
@@ -92,7 +99,9 @@ async function getData(city) {
   } else {
     try {
       const res = await fetch(
-        `https://api.weatherapi.com/v1/forecast.json?key=${WEATHER_API_KEY}&q=${city}&days=7`
+        `https://api.weatherapi.com/v1/forecast.json?key=${getKey(
+          WEATHER_API_KEY
+        )}&q=${city}&days=7`
       );
       fetchedData = await res.json();
       dataMap.set(city, fetchedData);
