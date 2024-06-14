@@ -14,8 +14,9 @@
   00. Variables
 ----------------------------------------*/
 
-// const GOOGLE_MAPS_API_KEY = "AIzaSyDN6Hu-a_vLpV53pBXnDw49U53osu6NFXc";
-const WEATHER_API_KEY = "11f69ed6df8f459e80d51521241306";
+const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY;
+const WEATHER_API_KEY = process.env.WEATHER_API_KEY;
+console.log(GOOGLE_MAPS_API_KEY, WEATHER_API_KEY);
 let fetchedData;
 const dataMap = new Map();
 
