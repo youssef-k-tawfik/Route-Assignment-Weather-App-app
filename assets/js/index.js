@@ -45,7 +45,6 @@ document.getElementById("cityInput").addEventListener("input", (e) => {
 
 async function getUserLocation() {
   try {
-    console.log("hi");
     const { latitude, longitude } = await getGeolocation();
     const res = await fetch(
       `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${getKey(
