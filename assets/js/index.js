@@ -14,8 +14,24 @@
   00. Variables
 ----------------------------------------*/
 
-const API_KEY = "11f69ed6df8f459e80d51521241306";
+// const GOOGLE_MAPS_API_KEY = "AIzaSyDN6Hu-a_vLpV53pBXnDw49U53osu6NFXc";
+let userLatitude, userLongitude;
+async function getUserLocation() {
+  try {
+    const { latitude, longitude } = await getGeolocation();
 
+    const res = await fetch(
+      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&sensor=true&key=AIzaSyDN6Hu-a_vLpV53pBXnDw49U53osu6NFXc`
+    );
+    // "https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&sensor=true&key=AIzaSyDN6Hu-a_vLpV53pBXnDw49U53osu6NFXc"
+    const data = await res.json();
+    console.log(data);
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+const WEATHER_API_KEY = "11f69ed6df8f459e80d51521241306";
 let fetchedData;
 const dataMap = new Map();
 
@@ -23,7 +39,42 @@ const dataMap = new Map();
 01. Events
 ----------------------------------------*/
 
+function getGeolocation() {
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => resolve(onGeoLocationSuccess(position)),
+      (err) => reject(onGeoLocationFail(err))
+    );
+  });
+}
+function onGeoLocationSuccess(position) {
+  return {
+    latitude: position.coords.latitude,
+    longitude: position.coords.longitude,
+  };
+}
+function onGeoLocationFail(err) {
+  let errorMessage;
+  switch (err.code) {
+    case err.PERMISSION_DENIED:
+      errorMessage = "User denied the request for Geolocation.";
+      break;
+    case err.POSITION_UNAVAILABLE:
+      errorMessage = "Location information is unavailable.";
+      break;
+    case err.TIMEOUT:
+      errorMessage = "The request to get user location timed out.";
+      break;
+    case err.UNKNOWN_ERROR:
+      errorMessage = "An unknown error occurred.";
+      break;
+  }
+  console.error(`Couldn't get user's location because: ${errorMessage}`);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+  getUserLocation();
+  // getData(getUserLocation());
   getData("Alexandria");
 });
 
@@ -39,7 +90,7 @@ document.getElementById("cityInput").addEventListener("input", (e) => {
 async function getData(city) {
   try {
     const res = await fetch(
-      `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${city}&days=7`
+      `https://api.weatherapi.com/v1/forecast.json?key=${WEATHER_API_KEY}&q=${city}&days=7`
     );
     fetchedData = await res.json();
     mapData();
