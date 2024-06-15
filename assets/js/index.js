@@ -101,7 +101,6 @@ async function getData(city) {
       )}&q=${city}&days=7`
     );
     fetchedData = await res.json();
-    dataMap.set(city, fetchedData);
     mapData();
     displayAllData();
   } catch (err) {
