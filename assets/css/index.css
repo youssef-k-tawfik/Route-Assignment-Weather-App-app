@@ -121,6 +121,7 @@ button.navbar-toggler:focus {
 
 .weather-app .container {
   backdrop-filter: blur(20px);
+    box-shadow: 0 0 8px 3px #344d66;
 }
 .hourly {
   height: 172px;
