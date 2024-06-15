@@ -30,6 +30,8 @@ const dataMap = new Map();
 ----------------------------------------*/
 
 document.addEventListener("DOMContentLoaded", async () => {
+  // Load Alexandria till the user gives GeoAPI the permission
+  getData("Alexandria");
   const city = await getUserLocation();
   getData(city);
 });
