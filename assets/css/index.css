@@ -33,6 +33,7 @@ body {
   background: url(../images/body-bg.gif);
   background-size: cover;
   background-repeat: no-repeat;
+  min-height: 100vh;
 }
 
 img {
@@ -121,7 +122,7 @@ button.navbar-toggler:focus {
 
 .weather-app .container {
   backdrop-filter: blur(20px);
-    box-shadow: 0 0 8px 3px #344d66;
+  box-shadow: 0 0 8px 3px #344d66;
 }
 .hourly {
   height: 172px;
