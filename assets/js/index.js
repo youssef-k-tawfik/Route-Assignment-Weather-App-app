@@ -16,7 +16,7 @@
 
 const GOOGLE_MAPS_API_KEY =
   "QUl6YVN5RE42SHUtYV92THBWNTNwQlhuRHc0OVU1M29zdTZORlhj";
-const WEATHER_API_KEY = "MTFmNjllZDZkZjhmNDU5ZTgwZDUxNTIxMjQxMzA2";
+const WEATHER_API_KEY = "ODBkZDRkYjEzZjgxNGUwNWI0NzMzNjQ0MjQwOTA3";
 
 function getKey(key) {
   return atob(key);
