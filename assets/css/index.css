@@ -183,9 +183,7 @@ button.navbar-toggler:focus {
 /*----------------------------------------
   04. Footer
 ----------------------------------------*/
-footer {
-  /* backdrop-filter: blur(20px); */
-}
+
 footer input[type="email"] {
   padding: 0.6rem 0.75rem;
 }
