@@ -16,7 +16,7 @@
 
 const GOOGLE_MAPS_API_KEY =
   "QUl6YVN5RE42SHUtYV92THBWNTNwQlhuRHc0OVU1M29zdTZORlhj";
-const WEATHER_API_KEY = "ODBkZDRkYjEzZjgxNGUwNWI0NzMzNjQ0MjQwOTA3";
+const WEATHER_API_KEY = "ZmY5NDQzMmJjYzc2NDg5NWE5ODIxNDc1MjI0MjQwNw==";
 
 function getKey(key) {
   return atob(key);
@@ -24,6 +24,8 @@ function getKey(key) {
 
 let fetchedData;
 const dataMap = new Map();
+
+const loader = document.querySelector(".loader");
 
 /*----------------------------------------
 01. Events
@@ -221,6 +223,8 @@ function displayAllData() {
 
   // ! 7 Days
   displayWeek();
+
+  loader.classList.add("hidden");
 }
 
 function displayNowData() {

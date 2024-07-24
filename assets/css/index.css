@@ -60,6 +60,16 @@ a {
   background-color: var(--bg-color);
 }
 
+.loader {
+  background-color: #fff;
+  position: fixed;
+  inset: 0;
+}
+
+.hidden {
+  display: none;
+}
+
 /*----------------------------------------
   02. NavBar
 ----------------------------------------*/
